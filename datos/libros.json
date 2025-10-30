@@ -1,1 +1,46 @@
-[]
+[
+    {
+        "id": "B002B",
+        "titulo": "Aprende POO",
+        "autor": {
+            "nombre": "Bjarne Stroustrup",
+            "nacionalidad": "Danesa"
+        },
+        "categoria": "POO",
+        "anio": 2018,
+        "disponible": true
+    },
+    {
+        "id": "B003C",
+        "titulo": "Clean Code",
+        "autor": {
+            "nombre": "Robert C. Martin",
+            "nacionalidad": "Estadounidense"
+        },
+        "categoria": "Softw",
+        "anio": 2008,
+        "disponible": true
+    },
+    {
+        "id": "B004D",
+        "titulo": "El Arte de Programar",
+        "autor": {
+            "nombre": "Donald Knuth",
+            "nacionalidad": "Estadounidense"
+        },
+        "categoria": "Algor",
+        "anio": 1973,
+        "disponible": true
+    },
+    {
+        "id": "B005E",
+        "titulo": "Estructuras de Datos",
+        "autor": {
+            "nombre": "Nikos S. Tzannes",
+            "nacionalidad": "Griega"
+        },
+        "categoria": "Datos",
+        "anio": 1995,
+        "disponible": true
+    }
+]
