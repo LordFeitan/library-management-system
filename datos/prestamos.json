@@ -1,1 +1,21 @@
-[]
+[
+	{
+		"id_prestamo": "P001",
+		"miembro": {
+			"id_miembro": "M001",
+			"nombre": "Ana Torres",
+			"correo": "ana.torres@email.com",
+			"telefono": "987654321"
+		},
+		"libro": {
+			"isbn": "9781234567890",
+			"titulo": "Python para Todos",
+			"autor": {"nombre": "Guido van Rossum", "nacionalidad": "Holandesa"},
+			"categoria": {"nombre": "Programación", "descripcion": "Libros de programación y desarrollo de software"},
+			"anio": 2020,
+			"disponible": false
+		},
+		"fecha_prestamo": "2025-10-20",
+		"fecha_devolucion": null
+	}
+]

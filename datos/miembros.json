@@ -1,1 +1,14 @@
-[]
+[
+	{
+		"id_miembro": "M001",
+		"nombre": "Ana Torres",
+		"correo": "ana.torres@email.com",
+		"telefono": "987654321"
+	},
+	{
+		"id_miembro": "M002",
+		"nombre": "Luis Pérez",
+		"correo": "luis.perez@email.com",
+		"telefono": "912345678"
+	}
+]
