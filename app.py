@@ -1,4 +1,4 @@
-def print_table(headers, rows):
+def print_table(headers, rows):   #Función para imprimir tablas en consola
     col_widths = [max(len(str(cell)) for cell in col) for col in zip(headers, *rows)]
     fmt = ' | '.join('{{:{}}}'.format(w) for w in col_widths)
     sep = '-+-'.join('-' * w for w in col_widths)
@@ -13,85 +13,202 @@ from libros.libro import Libro
 from libros.autor import Autor
 from libros.categoria import Categoria
 from libros.validaciones_libros import validar_isbn, validar_titulo, validar_anio, validar_autor, validar_categoria
-from membresias.gestion_membresias import listar_miembros, agregar_miembro, modificar_miembro, eliminar_miembro, buscar_miembro_por_id, listar_prestamos, registrar_prestamo, devolver_prestamo
+from membresias.gestion_membresias import listar_miembros, agregar_miembro, modificar_miembro, eliminar_miembro, buscar_miembro_por_id, listar_prestamos, registrar_prestamo, devolver_prestamo, listar_prestamos_retrasados
 from membresias.miembro import Miembro
 from membresias.validaciones_membresias import validar_id_miembro, validar_nombre, validar_correo, validar_telefono
+
+from membresias.excepciones import (
+    MiembroNoEncontradoError, 
+    IDDuplicadoError,
+    LibroNoEncontradoError,
+    LibroNoDisponibleError, 
+    PrestamoActivoError
+)
+
+def prompt_enter():
+    """Espera que el usuario presione Enter para continuar"""
+    try:
+        input("\n Presiona Enter para continuar...")
+    except KeyboardInterrupt:
+        print("\n\n Operación cancelada por el usuario")
+        exit()
+
 def menu_miembros():
     while True:
-        print("\n--- Gestión de Miembros ---")
-        print("1. Listar miembros")
+        print("\n--- GESTIÓN DE MIEMBROS ---")
+        print("1. Listar miembros(tabla)")
         print("2. Agregar miembro")
         print("3. Modificar miembro")
         print("4. Eliminar miembro")
         print("5. Volver al menú principal")
         opcion = input("Seleccione una opción: ")
+
         match opcion:
             case '1':
                 miembros = listar_miembros()
                 if not miembros:
-                    print("No hay miembros registrados.")
+                    print("❌ No hay miembros registrados.")
                 else:
                     headers = ["ID", "Nombre", "Correo", "Teléfono"]
                     rows = [
-                        [m['id_miembro'], m['nombre'], m['correo'], m['telefono']]
+                        [m.id_miembro, m.nombre, m.correo, m.telefono]  
                         for m in miembros
                     ]
+                    print("\n------------- LISTA DE MIEMBROS -------------\n") #Cambio aqui
                     print_table(headers, rows)
+                prompt_enter()
+
             case '2':
                 try:
-                    id_miembro = input("ID: ")
-                    validar_id_miembro(id_miembro)
-                    nombre = input("Nombre: ")
-                    validar_nombre(nombre)
-                    correo = input("Correo: ")
-                    validar_correo(correo)
-                    telefono = input("Teléfono: ")
-                    validar_telefono(telefono)
+                    print("\n---Ingrese los datos del nuevo miembro---")
+
+                    while True:
+                        id_miembro = input("ID: ").strip()
+                        try:
+                            validar_id_miembro(id_miembro)  
+                            id_miembro = id_miembro.upper()
+                            
+                            # Verificar si ID existe
+                            if buscar_miembro_por_id(id_miembro):
+                                print(f"❌ Error: ID ya existe. Por favor ingrese un ID diferente.")
+                            else:
+                                break 
+
+                        except ValueError as e:
+                            print(f"❌ Error en el ID: {e}")
+                    
+                    nombre = input("Nombre: ").strip()
+                    validar_nombre(nombre) 
+                    nombre = ' '.join(nombre.split()).title()
+                    
+                    correo = input("Correo: ").strip()
+                    validar_correo(correo)  
+                    correo = correo.lower()
+                    
+                    telefono = input("Teléfono: ").strip()
+                    validar_telefono(telefono)  
+                    telefono = telefono.replace(" ", "")
+                    
                     miembro = Miembro(id_miembro, nombre, correo, telefono)
                     agregar_miembro(miembro)
-                    print("Miembro agregado correctamente.")
+                    print("✅ Miembro agregado correctamente.")
+
+                except IDDuplicadoError as e:  # ← Capturar excepción específica
+                    print(f"{e}")
+                except ValueError as e:  # ← Capturar errores de validación
+                    print(f"❌ Error en los datos: {e}")
                 except Exception as e:
-                    print(f"Error: {e}")
+                    print(f"❌ Error inesperado: {e}")
+                prompt_enter()
+
             case '3':
                 try:
                     id_miembro = input("ID del miembro a modificar: ")
-                    miembro = buscar_miembro_por_id(id_miembro)
+                    id_miembro_normalizado = id_miembro.upper().strip()  # Asegura que el ID esté en mayúsculas -----cambio realizado
+
+                    miembro = buscar_miembro_por_id(id_miembro_normalizado) #cambio aqui
+
                     if not miembro:
-                        print("Miembro no encontrado.")
-                        continue
-                    print("Deje en blanco para mantener el valor actual.")
-                    nuevo_nombre = input(f"Nuevo nombre [{miembro['nombre']}]: ") or miembro['nombre']
-                    nuevo_correo = input(f"Nuevo correo [{miembro['correo']}]: ") or miembro['correo']
-                    nuevo_telefono = input(f"Nuevo teléfono [{miembro['telefono']}]: ") or miembro['telefono']
+                        print("❌ Miembro no encontrado")
+                        prompt_enter()
+                        continue 
+
+                    print("\nDeje en blanco para mantener el valor actual.")
+
+                     # Capturar nuevos datos con validación inmediata
+                    nuevo_nombre = input(f"\nNuevo nombre [{miembro['nombre']}]: ").strip()
+                    if nuevo_nombre:
+                        validar_nombre(nuevo_nombre)
+                        nuevo_nombre = ' '.join(nuevo_nombre.split()).title()
+                    else:
+                        nuevo_nombre = miembro['nombre']
+
+                    nuevo_correo = input(f"Nuevo correo [{miembro['correo']}]: ").strip()
+                    if nuevo_correo:
+                        validar_correo(nuevo_correo)
+                        nuevo_correo = nuevo_correo.lower()
+                    else:
+                        nuevo_correo = miembro['correo']
+
+                    nuevo_telefono = input(f"Nuevo teléfono [{miembro['telefono']}]: ").strip()
+                    if nuevo_telefono:
+                        validar_telefono(nuevo_telefono)
+                        nuevo_telefono = nuevo_telefono.replace(" ", "")
+                    else:
+                        nuevo_telefono = miembro['telefono']
+
                     nuevos_datos = {
                         'nombre': nuevo_nombre,
                         'correo': nuevo_correo,
                         'telefono': nuevo_telefono
                     }
-                    modificar_miembro(id_miembro, nuevos_datos)
-                    print("Miembro modificado correctamente.")
+
+                    # MOSTRAR RESUMEN DE CAMBIOS ANTES DE CONFIRMAR
+                    print("\n--- Resumen de cambios ---")
+                    print(f"ID: {miembro['id_miembro']} (no modificable)")
+                    
+                    if nuevo_nombre != miembro['nombre']:
+                        print(f"Nombre: {miembro['nombre']} → {nuevo_nombre} (MODIFICADO)")
+                    else:
+                        print(f"Nombre: {nuevo_nombre} (sin cambios)")
+                        
+                    if nuevo_correo != miembro['correo']:
+                        print(f"Correo: {miembro['correo']} → {nuevo_correo} (MODIFICADO)")
+                    else:
+                        print(f"Correo: {nuevo_correo} (sin cambios)")
+                        
+                    if nuevo_telefono != miembro['telefono']:
+                        print(f"Teléfono: {miembro['telefono']} → {nuevo_telefono} (MODIFICADO)")
+                    else:
+                        print(f"Teléfono: {nuevo_telefono} (sin cambios)")
+
+                    #CONFIRMACIÓN FINAL
+                    confirmar = input("\n" \
+                    "¿Confirmar los cambios? (s/n): ").lower()
+                    if confirmar != 's':
+                        print("❌ Modificación cancelada.")
+                        prompt_enter()
+                        continue
+
+                    modificar_miembro(id_miembro_normalizado, nuevos_datos)
+                    print("✅ Miembro modificado correctamente.")
+
+                except MiembroNoEncontradoError as e:  # ← Capturar excepción específica
+                    print(f" {e}")
+                except ValueError as e:
+                    print(f"❌ Error en los datos: {e}")
                 except Exception as e:
-                    print(f"Error: {e}")
+                    print(f"❌ Error inesperado: {e}")
+                prompt_enter()
+
             case '4':
                 try:
                     id_miembro = input("ID del miembro a eliminar: ")
-                    eliminar_miembro(id_miembro)
-                    print("Miembro eliminado correctamente.")
+                    eliminar_miembro(id_miembro.upper())  # Asegura que el ID esté en mayúsculas -----cambio realizado
+                    print("✅ Miembro eliminado correctamente.")
+                except MiembroNoEncontradoError as e:  # ← Capturar excepción específica
+                    print(f"{e}")
                 except Exception as e:
-                    print(f"Error: {e}")
+                    print(f"❌ Error inesperado: {e}")
+                prompt_enter()
+
             case '5':
                 break
+                
             case _:
                 print("Opción no válida.")
+                prompt_enter()
 
 def menu_prestamos():
     while True:
         print("\n--- Gestión de Préstamos ---")
-        print("1. Listar préstamos")
+        print("1. Listar préstamos (tabla)")
         print("2. Registrar préstamo")
         print("3. Devolver préstamo")
-        print("4. Volver al menú principal")
+        print("4. Ver préstamos retrasados")
+        print("5. Volver al menú principal")
         opcion = input("Seleccione una opción: ")
+
         match opcion:
             case '1':
                 prestamos = listar_prestamos()
@@ -109,26 +226,68 @@ def menu_prestamos():
                         ] for p in prestamos
                     ]
                     print_table(headers, rows)
+                prompt_enter()
+
             case '2':
                 try:
                     id_prestamo = input("ID de préstamo: ")
                     id_miembro = input("ID de miembro: ")
+                    id_miembro = id_miembro.upper()  # Asegura que el ID esté en mayúsculas -----cambio realizado2
                     id_libro = input("ID del libro: ")
                     registrar_prestamo(id_prestamo, id_miembro, id_libro)
                     print("Préstamo registrado correctamente.")
+                except (LibroNoEncontradoError, LibroNoDisponibleError, MiembroNoEncontradoError, PrestamoActivoError) as e:  # ← Múltiples excepciones
+                    print(f"{e}")
+                except ValueError as e:
+                    print(f"Error en los datos: {e}")
                 except Exception as e:
-                    print(f"Error: {e}")
+                    print(f"Error inesperado: {e}")
+                prompt_enter()
+
             case '3':
                 try:
                     id_prestamo = input("ID del préstamo a devolver: ")
-                    devolver_prestamo(id_prestamo)
-                    print("Préstamo devuelto correctamente.")
+                    resultado = devolver_prestamo(id_prestamo)
+                    
+                    if resultado['estado'] == 'devuelto_con_penalizacion':
+                        print("✅ Préstamo devuelto correctamente.")
+                        print("⚠️  Se aplicó penalización por retraso.")
+                    else:
+                        print("✅ Préstamo devuelto correctamente.")
+                        
+                except PrestamoActivoError as e:
+                    print(f"{e}")
                 except Exception as e:
-                    print(f"Error: {e}")
-            case '4':
+                    print(f"Error inesperado: {e}")
+                prompt_enter()
+
+            case '4':  # Agrega esta opción en el menú
+                prestamos_retrasados = listar_prestamos_retrasados()
+                if not prestamos_retrasados:
+                    print("✅ No hay préstamos retrasados.")
+                else:
+                    print(f"🚨 PRÉSTAMOS RETRASADOS ({len(prestamos_retrasados)})")
+                    headers = ["ID Préstamo", "Libro", "Miembro", "Días Retraso", "Multa Estimada"]
+                    rows = []
+                    for item in prestamos_retrasados:
+                        p = item['prestamo']
+                        dias_retraso = item['dias_retraso']
+                        multa_estimada = dias_retraso * 1.0  # $1 por día
+                        rows.append([
+                            p['id_prestamo'],
+                            p['libro']['titulo'],
+                            p['miembro']['nombre'],
+                            dias_retraso,
+                            f"${multa_estimada:.2f}"
+                        ])
+                    print_table(headers, rows)
+                prompt_enter()
+
+            case '5':
                 break
             case _:
                 print("Opción no válida.")
+                prompt_enter()
 
 
 def menu_libros():
@@ -158,6 +317,8 @@ def menu_libros():
                         ] for libro in libros
                     ]
                     print_table(headers, rows)
+                prompt_enter()
+
             case '2':
                 try:
                     id_libro = input("ID: ")
@@ -177,6 +338,8 @@ def menu_libros():
                     print("Libro agregado correctamente.")
                 except Exception as e:
                     print(f"Error: {e}")
+                prompt_enter()
+
             case '3':
                 try:
                     id_libro = input("ID del libro a modificar: ")
@@ -199,6 +362,8 @@ def menu_libros():
                     print("Libro modificado correctamente.")
                 except Exception as e:
                     print(f"Error: {e}")
+                prompt_enter()
+
             case '4':
                 try:
                     id_libro = input("ID del libro a eliminar: ")
@@ -210,6 +375,7 @@ def menu_libros():
                 break
             case _:
                 print("Opción no válida.")
+                prompt_enter()
 
 
 

@@ -1,5 +1,4 @@
 # Clase Miembro
-
 class Miembro:
 	def __init__(self, id_miembro: str, nombre: str, correo: str, telefono: str):
 		self._id_miembro = id_miembro
@@ -9,7 +8,7 @@ class Miembro:
 
 	@property
 	def id_miembro(self):
-		return self._id_miembro
+		return self._id_miembro.upper()   # Asegura que el ID esté en mayúsculas
 
 	@id_miembro.setter
 	def id_miembro(self, valor):
