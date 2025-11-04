@@ -5,7 +5,6 @@ from libros.gestion_libros import buscar_libro_por_id, modificar_libro
 from .prestamo import Prestamo
 from datetime import date
 
-# IMPORTAR EXCEPCIONES PERSONALIZADAS
 from .excepciones import (
     MiembroNoEncontradoError, 
     IDDuplicadoError, 
@@ -14,7 +13,7 @@ from .excepciones import (
     PrestamoActivoError
 )
 
-#IMPORTAR PENALIZACIONES
+
 from .penalizaciones import PenalizacionCombinada
 
 RUTA_JSON_PRESTAMOS = 'datos/prestamos.json'
@@ -49,7 +48,6 @@ def registrar_prestamo(id_prestamo, id_miembro, id_libro):
 		'fecha_devolucion': None
 	}
 	prestamos.append(prestamo)
-	# Marcar libro como no disponible
 	modificar_libro(id_libro, {'disponible': False})
 	guardar_datos(RUTA_JSON_PRESTAMOS, prestamos)
 
