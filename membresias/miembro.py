@@ -8,7 +8,7 @@ class Miembro:
 
 	@property
 	def id_miembro(self):
-		return self._id_miembro.upper()   # Asegura que el ID esté en mayúsculas
+		return self._id_miembro.upper() 
 
 	@id_miembro.setter
 	def id_miembro(self, valor):

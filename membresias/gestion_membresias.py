@@ -28,7 +28,7 @@ def registrar_prestamo(id_prestamo, id_miembro, id_libro):
 	miembros = cargar_datos(RUTA_JSON_MIEMBROS)
 	libro = buscar_libro_por_id(id_libro)
 	
-	if not libro:  #excepciones agregadas
+	if not libro: 
 		raise LibroNoEncontradoError(f'Libro con ID {id_libro} no encontrado.')
 	
 	if not libro.get('disponible', True):
@@ -59,12 +59,12 @@ def verificar_penalizaciones(id_miembro):
     prestamos_miembro = [p for p in prestamos if p['miembro']['id_miembro'] == id_miembro and not p.get('fecha_devolucion')]
     
     for prestamo_data in prestamos_miembro:
-        # Crear objeto Prestamo para calcular retrasos
+      
         fecha_prestamo = date.fromisoformat(prestamo_data['fecha_prestamo'])
         prestamo_obj = Prestamo(
             prestamo_data['id_prestamo'],
             Miembro(**prestamo_data['miembro']),
-            None,  # No necesitamos el objeto libro completo
+            None,  
             fecha_prestamo
         )
         
@@ -77,7 +77,7 @@ def aplicar_penalizacion_automatica(id_prestamo):
     prestamos = cargar_datos(RUTA_JSON_PRESTAMOS)
     for prestamo_data in prestamos:
         if prestamo_data['id_prestamo'] == id_prestamo:
-            # Crear objeto Prestamo para el cálculo
+         
             fecha_prestamo = date.fromisoformat(prestamo_data['fecha_prestamo'])
             fecha_devolucion = date.today()
             
@@ -90,7 +90,7 @@ def aplicar_penalizacion_automatica(id_prestamo):
             )
             
             if prestamo_obj.esta_retrasado:
-                # Aplicar penalización combinada
+               
                 penalizacion = PenalizacionCombinada(prestamo_obj, prestamo_obj.dias_retraso)
                 resultado = penalizacion.aplicar_penalizacion()
                 
@@ -108,11 +108,11 @@ def devolver_prestamo(id_prestamo):
         if p['id_prestamo'] == id_prestamo and not p.get('fecha_devolucion'):
             p['fecha_devolucion'] = str(date.today())
             
-            # Marcar libro como disponible
+         
             id_libro = p['libro']['id']
             modificar_libro(id_libro, {'disponible': True})
             
-            # Verificar y aplicar penalización si hay retraso
+           
             penalizacion = aplicar_penalizacion_automatica(id_prestamo)
             
             guardar_datos(RUTA_JSON_PRESTAMOS, prestamos)
@@ -160,12 +160,12 @@ def buscar_miembro_por_id(id_miembro):
 			return m
 	return None
 
-def guardar_miembros_ordenados(miembros):   #agregada función
+def guardar_miembros_ordenados(miembros): 
     """Guarda los miembros ordenados por ID"""
     miembros_ordenados = sorted(miembros, key=lambda x: x['id_miembro'])
     guardar_datos(RUTA_JSON_MIEMBROS, miembros_ordenados)
 
-def agregar_miembro(miembro: Miembro): #desde aqui se realizo algunos cambios
+def agregar_miembro(miembro: Miembro): 
 	miembros = cargar_datos(RUTA_JSON_MIEMBROS)
 
 	if any(m['id_miembro'] == miembro.id_miembro for m in miembros):

@@ -1,4 +1,3 @@
-# Clase base Persona
 
 class Persona:
     def __init__(self, nombre: str, nacionalidad: str = None):
