@@ -3,7 +3,7 @@ from .miembro import Miembro
 from datetime import date, timedelta
 
 class Prestamo:
-    DIAS_PRESTAMO = 14  # Días establecidos para el préstamo
+    DIAS_PRESTAMO = 14
     
     def __init__(self, id_prestamo: str, miembro: Miembro, libro: Libro, fecha_prestamo: date, fecha_devolucion: date = None):
         self._id_prestamo = id_prestamo.upper()
