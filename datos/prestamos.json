@@ -1,21 +1,46 @@
 [
-	{
-		"id_prestamo": "P001",
-		"miembro": {
-			"id_miembro": "M001",
-			"nombre": "Ana Torres",
-			"correo": "ana.torres@email.com",
-			"telefono": "987654321"
-		},
-		"libro": {
-			"isbn": "9781234567890",
-			"titulo": "Python para Todos",
-			"autor": {"nombre": "Guido van Rossum", "nacionalidad": "Holandesa"},
-			"categoria": {"nombre": "Programación", "descripcion": "Libros de programación y desarrollo de software"},
-			"anio": 2020,
-			"disponible": false
-		},
-		"fecha_prestamo": "2025-10-20",
-		"fecha_devolucion": null
-	}
+    {
+        "id_prestamo": "P001",
+        "miembro": {
+            "id_miembro": "M001",
+            "nombre": "Ana Torres",
+            "correo": "ana.torres@email.com",
+            "telefono": "987654321"
+        },
+        "libro": {
+            "id": "B001A",
+            "titulo": "Python para Todos",
+            "autor": {
+                "nombre": "Guido van Rossum",
+                "nacionalidad": "Holandesa"
+            },
+            "categoria": "Programación",
+            "anio": 2020,
+            "disponible": false
+        },
+        "fecha_prestamo": "2025-10-20",
+        "fecha_devolucion": null
+    },
+    {
+        "id_prestamo": "P002",
+        "miembro": {
+            "id_miembro": "M008",
+            "nombre": "Anita Lopez",
+            "correo": "analopez@gmail.com",
+            "telefono": "984565444"
+        },
+        "libro": {
+            "id": "L001",
+            "titulo": "Aprendiendo a a prender",
+            "autor": {
+                "nombre": "George Arrunategui",
+                "nacionalidad": "Peruano"
+            },
+            "categoria": "Programacion",
+            "anio": 2025,
+            "disponible": true
+        },
+        "fecha_prestamo": "2025-11-05",
+        "fecha_devolucion": null
+    }
 ]
