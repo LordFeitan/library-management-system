@@ -42,5 +42,16 @@
         "categoria": "Datos",
         "anio": 1995,
         "disponible": true
+    },
+    {
+        "id": "L001",
+        "titulo": "Aprendiendo a a prender",
+        "autor": {
+            "nombre": "George Arrunategui",
+            "nacionalidad": "Peruano"
+        },
+        "categoria": "Programacion",
+        "anio": 2025,
+        "disponible": true
     }
 ]
