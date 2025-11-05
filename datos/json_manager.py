@@ -1,4 +1,3 @@
-# Módulo para lectura/escritura de archivos JSON
 import json
 import os
 
