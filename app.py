@@ -4,7 +4,7 @@ from libros.gestion_libros import (
 from libros.libro import Libro
 from libros.autor import Autor
 from libros.categoria import Categoria
-from libros.validaciones_libros import validar_isbn, validar_titulo, validar_anio, validar_autor, validar_categoria
+from libros.validaciones_libros import validar_id_libro, validar_titulo, validar_anio, validar_autor, validar_categoria
 
 from membresias.gestion_membresias import (
     listar_miembros, agregar_miembro, modificar_miembro, eliminar_miembro,
@@ -54,11 +54,14 @@ def pedir_id_no_existente(buscar_funcion, mensaje="ID: "):
             print("❌ El ID no puede estar vacío.")
             continue
         try:
-
-            validar_id_miembro(id_ingresado)
-        except Exception:
-
-            pass
+            # Si se está usando para libros, validar con validar_id_libro
+            if buscar_funcion.__name__ == 'buscar_libro_por_id':
+                validar_id_libro(id_ingresado)
+            else:
+                validar_id_miembro(id_ingresado)
+        except Exception as e:
+            print(f"❌ {e}")
+            continue
         existe = buscar_funcion(id_ingresado)
         if not existe:
             return id_ingresado

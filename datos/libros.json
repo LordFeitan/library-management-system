@@ -64,5 +64,27 @@
         "categoria": "Ficcion",
         "anio": 2025,
         "disponible": true
+    },
+    {
+        "id": "@ASASAS",
+        "titulo": "asasas",
+        "autor": {
+            "nombre": "asas",
+            "nacionalidad": "asas"
+        },
+        "categoria": "asasas",
+        "anio": 2025,
+        "disponible": true
+    },
+    {
+        "id": "QQ@@@",
+        "titulo": "asas",
+        "autor": {
+            "nombre": "pedir_id_no_existente",
+            "nacionalidad": "pedir_id_no_existente"
+        },
+        "categoria": "pedir_id_no_existente",
+        "anio": 68797,
+        "disponible": true
     }
 ]
