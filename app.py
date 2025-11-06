@@ -410,8 +410,7 @@ def menu_libros():
 
             case '2':
                 try:
-                    id_libro = pedir_id_no_existente(lambda x: buscar_libro_por_id(x),
-                                                     "ID: ")
+                    id_libro = pedir_id_no_existente(buscar_libro_por_id, "ID: ")
                     while True:
                         titulo = input("Título: ").strip()
                         try:
