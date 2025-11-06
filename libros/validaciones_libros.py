@@ -8,6 +8,9 @@ def validar_isbn(isbn):
 def validar_titulo(titulo):
 	if not titulo or not isinstance(titulo, str):
 		raise ValueError('El título debe ser un texto no vacío.')
+	# Permitir solo títulos alfanuméricos y espacios
+	if not all(c.isalnum() or c.isspace() for c in titulo):
+		raise ValueError('El título solo puede contener caracteres alfanuméricos y espacios.')
 
 def validar_anio(anio):
 	if not isinstance(anio, int) or anio < 0:

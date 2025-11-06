@@ -53,5 +53,16 @@
         "categoria": "Programacion",
         "anio": 2025,
         "disponible": false
+    },
+    {
+        "id": "X0001",
+        "titulo": "asasas-48@@@@@@@°°°",
+        "autor": {
+            "nombre": "sasaasas",
+            "nacionalidad": "Peruano"
+        },
+        "categoria": "Ficcion",
+        "anio": 2025,
+        "disponible": true
     }
 ]
