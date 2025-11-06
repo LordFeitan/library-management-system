@@ -1,4 +1,4 @@
-from persona import Persona
+from .persona import Persona
 
 class Autor(Persona):
     def __init__(self, nombre: str, nacionalidad: str):
