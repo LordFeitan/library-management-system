@@ -1,9 +1,13 @@
 
-def validar_isbn(isbn):
-	if not isbn or not isinstance(isbn, str):
-		raise ValueError('El ISBN debe ser un texto no vacío.')
-	if len(isbn) < 5:
-		raise ValueError('El ISBN debe tener al menos 5 caracteres.')
+
+# Nueva validación para el ID del libro
+def validar_id_libro(id_libro):
+	if not id_libro or not isinstance(id_libro, str):
+		raise ValueError('El ID debe ser un texto no vacío.')
+	if len(id_libro) < 3:
+		raise ValueError('El ID debe tener al menos 3 caracteres.')
+	if not id_libro.isalnum():
+		raise ValueError('El ID solo puede contener caracteres alfanuméricos (sin espacios ni símbolos).')
 
 def validar_titulo(titulo):
 	if not titulo or not isinstance(titulo, str):
