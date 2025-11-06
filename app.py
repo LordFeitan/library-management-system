@@ -1,3 +1,13 @@
+def confirmar_salida():
+    respuesta = input("¿Seguro que deseas salir? (s/n): ").strip().lower()
+    if respuesta == 's':
+        print("¡Hasta luego!")
+        exit()
+    elif respuesta == 'n':
+        return
+    else:
+        print("Respuesta no válida. Intenta de nuevo.")
+        confirmar_salida()
 from libros.gestion_libros import (
     listar_libros, agregar_libro, modificar_libro, eliminar_libro, buscar_libro_por_id
 )
@@ -507,8 +517,7 @@ def menu_principal():
             case '3':
                 menu_prestamos()
             case '4':
-                print("¡Hasta luego!")
-                break
+                confirmar_salida()
             case _:
                 print("Opción no válida.")
 
