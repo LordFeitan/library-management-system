@@ -20,6 +20,8 @@ def listar_libros():
 				l['anio'],
 				l.get('disponible', True)
 			)
+			# inyectar stock para que la UI pueda mostrarlo
+			setattr(libro, 'stock', l.get('stock', 0))
 			libros.append(libro)
 		except Exception as e:
 			errores.append(f"Error en libro #{idx+1}: {e}")
@@ -28,6 +30,28 @@ def listar_libros():
 		for err in errores:
 			print(err)
 	return libros
+
+def generar_siguiente_id_libro():
+	"""Genera el siguiente ID de libro automáticamente (L001, L002, ...)"""
+	libros = cargar_datos(RUTA_JSON)
+	if not libros:
+		return 'L001'
+	
+	# Extraer números de los IDs existentes
+	numeros = []
+	for libro in libros:
+		id_str = libro['id']
+		if id_str.startswith('L') and len(id_str) > 1:
+			try:
+				numeros.append(int(id_str[1:]))
+			except ValueError:
+				continue
+	
+	if not numeros:
+		return 'L001'
+	
+	siguiente_numero = max(numeros) + 1
+	return f'L{siguiente_numero:03d}'
 
 def buscar_libro_por_id(id_libro):
 	libros = cargar_datos(RUTA_JSON)
@@ -46,7 +70,7 @@ def agregar_libro(libro: Libro):
 		'autor': {'nombre': libro.autor.nombre, 'nacionalidad': libro.autor.nacionalidad},
 		'categoria': libro.categoria,
 		'anio': libro.anio,
-		'disponible': libro.disponible
+		'stock': getattr(libro, 'stock', 1)
 	})
 	guardar_datos(RUTA_JSON, libros)
 

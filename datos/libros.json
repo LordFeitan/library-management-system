@@ -1,57 +1,79 @@
 [
     {
-        "id": "B002B",
+        "id": "L001",
         "titulo": "Aprende POO",
         "autor": {
             "nombre": "Bjarne Stroustrup",
             "nacionalidad": "Danesa"
         },
-        "categoria": "POO",
+        "categoria": "CAT005",
         "anio": 2018,
-        "disponible": true
+        "stock": 15
     },
     {
-        "id": "B003C",
+        "id": "L002",
         "titulo": "Clean Code",
         "autor": {
             "nombre": "Robert C. Martin",
             "nacionalidad": "Estadounidense"
         },
-        "categoria": "Softw",
+        "categoria": "CAT010",
         "anio": 2008,
-        "disponible": true
+        "stock": 5
     },
     {
-        "id": "B004D",
+        "id": "L003",
         "titulo": "El Arte de Programar",
         "autor": {
             "nombre": "Donald Knuth",
             "nacionalidad": "Estadounidense"
         },
-        "categoria": "Algor",
+        "categoria": "CAT004",
         "anio": 1973,
-        "disponible": true
+        "stock": 10
     },
     {
-        "id": "B005E",
+        "id": "L004",
         "titulo": "Estructuras de Datos",
         "autor": {
             "nombre": "Nikos S. Tzannes",
             "nacionalidad": "Griega"
         },
-        "categoria": "Datos",
+        "categoria": "CAT003",
         "anio": 1995,
-        "disponible": true
+        "stock": 3
     },
     {
-        "id": "L001",
+        "id": "L005",
         "titulo": "Aprendiendo a a prender",
         "autor": {
             "nombre": "George Arrunategui",
             "nacionalidad": "Peruano"
         },
-        "categoria": "Programacion",
+        "categoria": "CAT009",
         "anio": 2025,
-        "disponible": false
+        "stock": 5
+    },
+    {
+        "id": "L006",
+        "titulo": "Lectura basica de PY",
+        "autor": {
+            "nombre": "Pacho",
+            "nacionalidad": "Peruana"
+        },
+        "categoria": "CAT009",
+        "anio": 2025,
+        "stock": 10
+    },
+    {
+        "id": "L007",
+        "titulo": "Interfaces web",
+        "autor": {
+            "nombre": "Navas",
+            "nacionalidad": "Peruano"
+        },
+        "categoria": "CAT001",
+        "anio": 2025,
+        "stock": 10
     }
 ]

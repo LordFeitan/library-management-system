@@ -3,54 +3,63 @@
         "id_miembro": "M001",
         "nombre": "Ana Torres",
         "correo": "ana.torres@email.com",
-        "telefono": "987654321"
+        "telefono": "987654321",
+        "prestamos": []
     },
     {
         "id_miembro": "M002",
         "nombre": "Janet Rios",
         "correo": "janet.rios@gmail.com",
-        "telefono": "987876543"
+        "telefono": "987876543",
+        "prestamos": []
     },
     {
         "id_miembro": "M003",
         "nombre": "Jacobo Ruiz",
         "correo": "jacobo@email.com",
-        "telefono": "983892888"
+        "telefono": "983892888",
+        "prestamos": []
     },
     {
         "id_miembro": "M004",
         "nombre": "Luis Martinez",
         "correo": "luismartinez@email.com",
-        "telefono": "938474444"
+        "telefono": "938474444",
+        "prestamos": []
     },
     {
         "id_miembro": "M005",
         "nombre": "Claudia Benitez",
         "correo": "claudiabenitez@email.com",
-        "telefono": "989893333"
+        "telefono": "989893333",
+        "prestamos": []
     },
     {
         "id_miembro": "M006",
         "nombre": "Maria Gonzáles",
         "correo": "maria.gonzales@email.com",
-        "telefono": "987345654"
+        "telefono": "987345654",
+        "prestamos": []
     },
     {
         "id_miembro": "M007",
         "nombre": "Caros Mendoza",
         "correo": "carlosmendoza@gmail.com",
-        "telefono": "987234432"
+        "telefono": "987234432",
+        "prestamos": []
     },
     {
         "id_miembro": "M008",
         "nombre": "Anita Lopez",
         "correo": "analopez@gmail.com",
-        "telefono": "984565444"
+        "telefono": "984565444",
+        "prestamos": []
     },
     {
         "id_miembro": "M009",
         "nombre": "Sofía Herrera",
         "correo": "sofia.herrera@hotmail.com",
-        "telefono": "989654656"
+        "telefono": "989654656",
+        "prestamos": []
     }
 ]

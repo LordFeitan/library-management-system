@@ -1,0 +1,52 @@
+[
+    {
+        "id_categoria": "CAT001",
+        "nombre": "Programación Web",
+        "descripcion": "Desarrollo frontend y backend, HTML, CSS, JavaScript, frameworks web"
+    },
+    {
+        "id_categoria": "CAT002",
+        "nombre": "Programación Móvil",
+        "descripcion": "Desarrollo de aplicaciones Android, iOS, Flutter, React Native"
+    },
+    {
+        "id_categoria": "CAT003",
+        "nombre": "Bases de Datos",
+        "descripcion": "SQL, NoSQL, diseño de bases de datos, optimización y administración"
+    },
+    {
+        "id_categoria": "CAT004",
+        "nombre": "Algoritmos y Estructuras de Datos",
+        "descripcion": "Fundamentos de algoritmos, estructuras de datos, complejidad computacional"
+    },
+    {
+        "id_categoria": "CAT005",
+        "nombre": "Programación Orientada a Objetos",
+        "descripcion": "POO, patrones de diseño, principios SOLID, clean code"
+    },
+    {
+        "id_categoria": "CAT006",
+        "nombre": "Inteligencia Artificial y Machine Learning",
+        "descripcion": "IA, ML, Deep Learning, redes neuronales, procesamiento de datos"
+    },
+    {
+        "id_categoria": "CAT007",
+        "nombre": "DevOps y Cloud Computing",
+        "descripcion": "CI/CD, Docker, Kubernetes, AWS, Azure, infraestructura como código"
+    },
+    {
+        "id_categoria": "CAT008",
+        "nombre": "Ciberseguridad",
+        "descripcion": "Seguridad informática, ethical hacking, criptografía, protección de datos"
+    },
+    {
+        "id_categoria": "CAT009",
+        "nombre": "Lenguajes de Programación",
+        "descripcion": "Python, Java, C++, JavaScript, Go, Rust y otros lenguajes"
+    },
+    {
+        "id_categoria": "CAT010",
+        "nombre": "Ingeniería de Software",
+        "descripcion": "Arquitectura de software, metodologías ágiles, testing, gestión de proyectos"
+    }
+]
