@@ -1,3 +1,31 @@
+from libros.gestion_libros import (
+    listar_libros, agregar_libro, modificar_libro, eliminar_libro, buscar_libro_por_id,
+    generar_siguiente_id_libro
+)
+from membresias.excepciones import (
+    MiembroNoEncontradoError,
+    IDDuplicadoError,
+    LibroNoEncontradoError,
+    LibroNoDisponibleError,
+    PrestamoActivoError
+)
+from membresias.validaciones_membresias import validar_id_miembro, validar_nombre, validar_correo, validar_telefono
+from membresias.miembro import Miembro
+from membresias.gestion_membresias import (
+    listar_miembros, agregar_miembro, modificar_miembro, eliminar_miembro,
+    buscar_miembro_por_id, listar_prestamos, registrar_prestamo, devolver_prestamo,
+    listar_prestamos_retrasados, generar_siguiente_id_miembro, generar_siguiente_id_prestamo
+)
+from libros.validaciones_libros import validar_id_libro, validar_titulo, validar_anio, validar_autor, validar_categoria
+from libros.categoria import Categoria
+from libros.autor import Autor
+from libros.libro import Libro
+from libros.gestion_categorias import (
+    listar_categorias, agregar_categoria, modificar_categoria, eliminar_categoria,
+    buscar_categoria_por_id, buscar_categoria_por_nombre, mostrar_menu_seleccion_categoria
+)
+
+
 def confirmar_salida():
     respuesta = input("¿Seguro que deseas salir? (s/n): ").strip().lower()
     if respuesta == 's':
@@ -8,34 +36,6 @@ def confirmar_salida():
     else:
         print("Respuesta no válida. Intenta de nuevo.")
         confirmar_salida()
-from libros.gestion_libros import (
-    listar_libros, agregar_libro, modificar_libro, eliminar_libro, buscar_libro_por_id,
-    generar_siguiente_id_libro
-)
-from libros.gestion_categorias import (
-    listar_categorias, agregar_categoria, modificar_categoria, eliminar_categoria,
-    buscar_categoria_por_id, buscar_categoria_por_nombre, mostrar_menu_seleccion_categoria
-)
-from libros.libro import Libro
-from libros.autor import Autor
-from libros.categoria import Categoria
-from libros.validaciones_libros import validar_id_libro, validar_titulo, validar_anio, validar_autor, validar_categoria
-
-from membresias.gestion_membresias import (
-    listar_miembros, agregar_miembro, modificar_miembro, eliminar_miembro,
-    buscar_miembro_por_id, listar_prestamos, registrar_prestamo, devolver_prestamo,
-    listar_prestamos_retrasados, generar_siguiente_id_miembro, generar_siguiente_id_prestamo
-)
-from membresias.miembro import Miembro
-from membresias.validaciones_membresias import validar_id_miembro, validar_nombre, validar_correo, validar_telefono
-
-from membresias.excepciones import (
-    MiembroNoEncontradoError,
-    IDDuplicadoError,
-    LibroNoEncontradoError,
-    LibroNoDisponibleError,
-    PrestamoActivoError
-)
 
 
 def print_table(headers, rows):
@@ -69,7 +69,6 @@ def pedir_id_no_existente(buscar_funcion, mensaje="ID: "):
             print("❌ El ID no puede estar vacío.")
             continue
         try:
-            # Si se está usando para libros, validar con validar_id_libro
             if buscar_funcion.__name__ == 'buscar_libro_por_id':
                 validar_id_libro(id_ingresado)
             else:
@@ -140,7 +139,6 @@ def menu_miembros():
             case '2':
                 try:
                     print("\n--- Ingrese los datos del nuevo miembro ---")
-                    # Generar ID automáticamente
                     id_miembro = generar_siguiente_id_miembro()
                     print(f"📝 ID generado automáticamente: {id_miembro}")
 
@@ -185,13 +183,12 @@ def menu_miembros():
 
             case '3':
                 try:
-                    # Mostrar lista de miembros disponibles
                     miembros = listar_miembros()
                     if not miembros:
                         print("❌ No hay miembros registrados para modificar.")
                         prompt_enter()
                         continue
-                    
+
                     print("\n--- Miembros Disponibles ---")
                     headers = ["ID", "Nombre", "Correo", "Teléfono"]
                     rows = [
@@ -200,7 +197,7 @@ def menu_miembros():
                     ]
                     print_table(headers, rows)
                     print()
-                    
+
                     id_miembro = pedir_id_existente(lambda x: buscar_miembro_por_id(x),
                                                     "ID del miembro a modificar: ")
                     miembro = buscar_miembro_por_id(id_miembro)
@@ -281,13 +278,12 @@ def menu_miembros():
 
             case '4':
                 try:
-                    # Mostrar lista de miembros disponibles
                     miembros = listar_miembros()
                     if not miembros:
                         print("❌ No hay miembros registrados para eliminar.")
                         prompt_enter()
                         continue
-                    
+
                     print("\n--- Miembros Disponibles ---")
                     headers = ["ID", "Nombre", "Correo", "Teléfono"]
                     rows = [
@@ -296,7 +292,7 @@ def menu_miembros():
                     ]
                     print_table(headers, rows)
                     print()
-                    
+
                     id_miembro = pedir_id_existente(lambda x: buscar_miembro_por_id(x),
                                                     "ID del miembro a eliminar: ")
                     eliminar_miembro(id_miembro)
@@ -349,10 +345,10 @@ def menu_prestamos():
 
             case '2':
                 try:
-                    # Generar ID automáticamente
                     id_prestamo = generar_siguiente_id_prestamo()
-                    print(f"📝 ID de préstamo generado automáticamente: {id_prestamo}")
-                    
+                    print(
+                        f"📝 ID de préstamo generado automáticamente: {id_prestamo}")
+
                     id_miembro = pedir_id_existente(
                         lambda x: buscar_miembro_por_id(x), "ID de miembro: ")
                     id_libro = pedir_id_existente(
@@ -370,28 +366,31 @@ def menu_prestamos():
 
             case '3':
                 try:
-                    # Mostrar lista de préstamos activos
                     prestamos = listar_prestamos()
-                    prestamos_activos = [p for p in prestamos if not p.get('fecha_devolucion')]
-                    
+                    prestamos_activos = [
+                        p for p in prestamos if not p.get('fecha_devolucion')]
+
                     if not prestamos_activos:
                         print("❌ No hay préstamos activos para devolver.")
                         prompt_enter()
                         continue
-                    
+
                     print("\n--- Préstamos Activos (Pendientes de Devolución) ---")
-                    headers = ["ID Préstamo", "Libro", "Miembro", "Fecha Préstamo"]
+                    headers = ["ID Préstamo", "Libro",
+                               "Miembro", "Fecha Préstamo"]
                     rows = [
                         [
                             p['id_prestamo'],
-                            p['libro']['titulo'] if isinstance(p['libro'], dict) else str(p['libro']),
-                            p['miembro']['nombre'] if isinstance(p['miembro'], dict) else str(p['miembro']),
+                            p['libro']['titulo'] if isinstance(
+                                p['libro'], dict) else str(p['libro']),
+                            p['miembro']['nombre'] if isinstance(
+                                p['miembro'], dict) else str(p['miembro']),
                             p['fecha_prestamo']
                         ] for p in prestamos_activos
                     ]
                     print_table(headers, rows)
                     print()
-                    
+
                     id_prestamo = pedir_id_existente(lambda x: any(p['id_prestamo'] == x for p in listar_prestamos()),
                                                      "ID del préstamo a devolver: ", comprobar_activo=True)
                     resultado = devolver_prestamo(id_prestamo)
@@ -421,7 +420,7 @@ def menu_prestamos():
                     for item in prestamos_retrasados:
                         p = item['prestamo']
                         dias_retraso = item['dias_retraso']
-                        multa_estimada = dias_retraso * 1.0 
+                        multa_estimada = dias_retraso * 1.0
                         rows.append([
                             p['id_prestamo'],
                             p['libro']['titulo'],
@@ -458,11 +457,10 @@ def menu_libros():
                                "Categoría", "Año", "Stock"]
                     rows = []
                     for libro in libros:
-                        # Resolver ID de categoría a nombre
                         cat_id = libro.categoria
                         cat = buscar_categoria_por_id(cat_id)
                         cat_nombre = cat['nombre'] if cat else cat_id
-                        
+
                         rows.append([
                             libro.id,
                             libro.titulo,
@@ -476,10 +474,9 @@ def menu_libros():
 
             case '2':
                 try:
-                    # Generar ID automáticamente
                     id_libro = generar_siguiente_id_libro()
                     print(f"📝 ID generado automáticamente: {id_libro}")
-                    
+
                     while True:
                         titulo = input("Título: ").strip()
                         try:
@@ -498,13 +495,12 @@ def menu_libros():
                         prompt_enter()
                         continue
 
-                    # Usar selector de categorías
                     categoria = mostrar_menu_seleccion_categoria()
                     if not categoria:
                         print("❌ Operación cancelada.")
                         prompt_enter()
                         continue
-                    
+
                     try:
                         validar_categoria(categoria)
                     except Exception as e:
@@ -512,10 +508,10 @@ def menu_libros():
                         prompt_enter()
                         continue
 
-                    # Solicitar stock
                     while True:
                         try:
-                            stock = int(input("Stock inicial (número entero >= 0): ").strip())
+                            stock = int(
+                                input("Stock inicial (número entero >= 0): ").strip())
                             if stock < 0:
                                 print("❌ El stock no puede ser negativo.")
                                 continue
@@ -543,21 +539,21 @@ def menu_libros():
 
             case '3':
                 try:
-                    # Mostrar lista de libros disponibles
                     libros = listar_libros()
                     if not libros:
                         print("❌ No hay libros registrados para modificar.")
                         prompt_enter()
                         continue
-                    
+
                     print("\n--- Libros Disponibles ---")
-                    headers = ["ID", "Título", "Autor", "Categoría", "Año", "Stock"]
+                    headers = ["ID", "Título", "Autor",
+                               "Categoría", "Año", "Stock"]
                     rows = []
                     for libro_item in libros:
                         cat_id = libro_item.categoria
                         cat = buscar_categoria_por_id(cat_id)
                         cat_nombre = cat['nombre'] if cat else cat_id
-                        
+
                         rows.append([
                             libro_item.id,
                             libro_item.titulo,
@@ -568,7 +564,7 @@ def menu_libros():
                         ])
                     print_table(headers, rows)
                     print()
-                    
+
                     id_libro = pedir_id_existente(lambda x: buscar_libro_por_id(x),
                                                   "ID del libro a modificar: ")
                     libro = buscar_libro_por_id(id_libro)
@@ -578,13 +574,11 @@ def menu_libros():
                     print("Deje en blanco para mantener el valor actual.")
                     nuevo_titulo = input(
                         f"Nuevo título [{libro['titulo']}]: ").strip() or libro['titulo']
-                    
-                    # Resolver ID de categoría a nombre para mostrar
+
                     cat_id_actual = libro['categoria']
                     cat_actual = buscar_categoria_por_id(cat_id_actual)
                     cat_nombre_actual = cat_actual['nombre'] if cat_actual else cat_id_actual
-                    
-                    # Preguntar si desea cambiar la categoría
+
                     cambiar_categoria = input(
                         f"¿Desea cambiar la categoría actual '{cat_nombre_actual}'? (s/n): ").strip().lower()
                     if cambiar_categoria == 's':
@@ -593,12 +587,11 @@ def menu_libros():
                             nuevo_categoria = libro['categoria']
                     else:
                         nuevo_categoria = libro['categoria']
-                    
+
                     nuevo_anio_input = input(
                         f"Nuevo año [{libro['anio']}]: ").strip()
                     nuevo_anio = int(
                         nuevo_anio_input) if nuevo_anio_input else libro['anio']
-                    # Editar stock
                     nuevo_stock_input = input(
                         f"Nuevo stock [{libro.get('stock', 0)}]: ").strip()
                     if nuevo_stock_input:
@@ -628,21 +621,21 @@ def menu_libros():
 
             case '4':
                 try:
-                    # Mostrar lista de libros disponibles
                     libros = listar_libros()
                     if not libros:
                         print("❌ No hay libros registrados para eliminar.")
                         prompt_enter()
                         continue
-                    
+
                     print("\n--- Libros Disponibles ---")
-                    headers = ["ID", "Título", "Autor", "Categoría", "Año", "Stock"]
+                    headers = ["ID", "Título", "Autor",
+                               "Categoría", "Año", "Stock"]
                     rows = []
                     for libro_item in libros:
                         cat_id = libro_item.categoria
                         cat = buscar_categoria_por_id(cat_id)
                         cat_nombre = cat['nombre'] if cat else cat_id
-                        
+
                         rows.append([
                             libro_item.id,
                             libro_item.titulo,
@@ -653,7 +646,7 @@ def menu_libros():
                         ])
                     print_table(headers, rows)
                     print()
-                    
+
                     id_libro = pedir_id_existente(lambda x: buscar_libro_por_id(x),
                                                   "ID del libro a eliminar: ")
                     eliminar_libro(id_libro)
@@ -686,7 +679,8 @@ def menu_categorias():
                 else:
                     headers = ["ID", "Nombre", "Descripción"]
                     rows = [
-                        [cat['id_categoria'], cat['nombre'], cat.get('descripcion', '')]
+                        [cat['id_categoria'], cat['nombre'],
+                            cat.get('descripcion', '')]
                         for cat in categorias
                     ]
                     print("\n------------- LISTA DE CATEGORÍAS -------------\n")
@@ -697,27 +691,28 @@ def menu_categorias():
                 try:
                     print("\n--- Agregar Nueva Categoría ---")
                     nombre = input("Nombre de la categoría: ").strip()
-                    
+
                     if not nombre:
                         print("❌ El nombre no puede estar vacío.")
                         prompt_enter()
                         continue
-                    
+
                     if len(nombre) < 2:
                         print("❌ El nombre debe tener al menos 2 caracteres.")
                         prompt_enter()
                         continue
-                    
+
                     if buscar_categoria_por_nombre(nombre):
                         print(f"❌ Ya existe una categoría llamada '{nombre}'.")
                         prompt_enter()
                         continue
-                    
+
                     descripcion = input("Descripción (opcional): ").strip()
-                    
+
                     nueva_cat = agregar_categoria(nombre, descripcion)
-                    print(f"✅ Categoría '{nueva_cat['nombre']}' agregada correctamente con ID {nueva_cat['id_categoria']}.")
-                
+                    print(
+                        f"✅ Categoría '{nueva_cat['nombre']}' agregada correctamente con ID {nueva_cat['id_categoria']}.")
+
                 except Exception as e:
                     print(f"❌ Error: {e}")
                 prompt_enter()
@@ -729,34 +724,39 @@ def menu_categorias():
                         print("❌ No hay categorías para modificar.")
                         prompt_enter()
                         continue
-                    
+
                     print("\n--- Categorías Disponibles ---")
                     for idx, cat in enumerate(categorias, 1):
-                        print(f"{idx}. {cat['nombre']} (ID: {cat['id_categoria']})")
-                    
-                    id_cat = input("\nIngrese el ID de la categoría a modificar: ").strip().upper()
+                        print(
+                            f"{idx}. {cat['nombre']} (ID: {cat['id_categoria']})")
+
+                    id_cat = input(
+                        "\nIngrese el ID de la categoría a modificar: ").strip().upper()
                     categoria = buscar_categoria_por_id(id_cat)
-                    
+
                     if not categoria:
                         print("❌ Categoría no encontrada.")
                         prompt_enter()
                         continue
-                    
+
                     print(f"\nModificando: {categoria['nombre']}")
                     print("Deje en blanco para mantener el valor actual.")
-                    
-                    nuevo_nombre = input(f"Nuevo nombre [{categoria['nombre']}]: ").strip()
-                    nueva_descripcion = input(f"Nueva descripción [{categoria.get('descripcion', '')}]: ").strip()
-                    
+
+                    nuevo_nombre = input(
+                        f"Nuevo nombre [{categoria['nombre']}]: ").strip()
+                    nueva_descripcion = input(
+                        f"Nueva descripción [{categoria.get('descripcion', '')}]: ").strip()
+
                     if not nuevo_nombre:
                         nuevo_nombre = None
-                    
+
                     if not nueva_descripcion:
                         nueva_descripcion = None
-                    
-                    modificar_categoria(id_cat, nuevo_nombre, nueva_descripcion)
+
+                    modificar_categoria(
+                        id_cat, nuevo_nombre, nueva_descripcion)
                     print("✅ Categoría modificada correctamente.")
-                
+
                 except ValueError as e:
                     print(f"❌ {e}")
                 except Exception as e:
@@ -770,26 +770,29 @@ def menu_categorias():
                         print("❌ No hay categorías para eliminar.")
                         prompt_enter()
                         continue
-                    
+
                     print("\n--- Categorías Disponibles ---")
                     for idx, cat in enumerate(categorias, 1):
-                        print(f"{idx}. {cat['nombre']} (ID: {cat['id_categoria']})")
-                    
-                    id_cat = input("\nIngrese el ID de la categoría a eliminar: ").strip().upper()
+                        print(
+                            f"{idx}. {cat['nombre']} (ID: {cat['id_categoria']})")
+
+                    id_cat = input(
+                        "\nIngrese el ID de la categoría a eliminar: ").strip().upper()
                     categoria = buscar_categoria_por_id(id_cat)
-                    
+
                     if not categoria:
                         print("❌ Categoría no encontrada.")
                         prompt_enter()
                         continue
-                    
-                    confirmacion = input(f"¿Está seguro de eliminar '{categoria['nombre']}'? (s/n): ").strip().lower()
+
+                    confirmacion = input(
+                        f"¿Está seguro de eliminar '{categoria['nombre']}'? (s/n): ").strip().lower()
                     if confirmacion == 's':
                         eliminar_categoria(id_cat)
                         print("✅ Categoría eliminada correctamente.")
                     else:
                         print("❌ Operación cancelada.")
-                
+
                 except ValueError as e:
                     print(f"❌ {e}")
                 except Exception as e:

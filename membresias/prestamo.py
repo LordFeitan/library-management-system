@@ -2,9 +2,10 @@ from libros.libro import Libro
 from .miembro import Miembro
 from datetime import date, timedelta
 
+
 class Prestamo:
     DIAS_PRESTAMO = 14
-    
+
     def __init__(self, id_prestamo: str, miembro: Miembro, libro: Libro, fecha_prestamo: date, fecha_devolucion: date = None):
         self._id_prestamo = id_prestamo.upper()
         self._miembro = miembro
@@ -48,7 +49,7 @@ class Prestamo:
             dias = (self._fecha_devolucion - self.fecha_limite).days
         else:
             dias = (date.today() - self.fecha_limite).days
-        return max(0, dias)  # Retorna 0 si no hay retraso
+        return max(0, dias)
 
     @property
     def esta_retrasado(self):
